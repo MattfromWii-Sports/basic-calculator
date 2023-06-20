@@ -13,15 +13,16 @@ function numberFunction() {
 function operatorFunction() {
     if (preProcess.length !== 0) {
         finalProcess.push(parseInt(preProcess.join('')));
-        preProcess = []; //Reset Array for next numbers
+        preProcess = [];
+    }
+    if (finalProcess.length == 0) { //Check Array to avoid making operators the first item
+        return;
     }
     let isOperator = operatorCheck();
-    if (isOperator === true) { 
+    if (isOperator === true) { //Removes last array item if it is an operator
         finalProcess = finalProcess.slice(0, -1);
-        finalProcess.push(this.dataset.value);  
-    } else {
-        finalProcess.push(this.dataset.value);
     }
+    finalProcess.push(this.dataset.value);
     console.log(finalProcess);
 }
 
