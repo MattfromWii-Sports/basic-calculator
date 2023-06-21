@@ -29,11 +29,13 @@ body {
     font-size: 20px;
     word-spacing: -4px;
     margin-bottom: 4px;
+    min-height: 20px;
 }
 .bottom-screen {
     font-family: 'Courier New', Courier, monospace;
     font-size: 22px;
     word-spacing: -4px;
+    min-height: 26px;
 }
 
 .buttons {
