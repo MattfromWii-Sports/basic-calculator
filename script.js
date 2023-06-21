@@ -2,9 +2,11 @@ let preProcess = [];
 let finalProcess = [];
 const currentDisplay = document.getElementById('current-display');
 const lastDisplay = document.getElementById('last-display');
+const resetAC = document.getElementById('reset-button');
 const numbers = document.querySelectorAll('button.number');
 const operators = document.querySelectorAll('button.operator');
 
+resetAC.addEventListener('click', resetEverything);
 numbers.forEach(number => number.addEventListener('click', numberFunction));
 operators.forEach(operator => operator.addEventListener('click', operatorFunction));
 
@@ -33,6 +35,14 @@ function operatorFunction() {
     finalProcess.push(this.dataset.value);
     currentDisplay.textContent = `${finalProcess.join(' ')}`;
     console.log(finalProcess);
+}
+
+//Reset All
+function resetEverything() {
+    preProcess = [];
+    finalProcess = [];
+    currentDisplay.textContent = '0';
+    lastDisplay.textContent = '0';
 }
 
 //Operator Check
