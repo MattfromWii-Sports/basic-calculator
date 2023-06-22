@@ -1,4 +1,3 @@
-let firstNumber = false;
 let preProcess = [];
 let finalProcess = [];
 const currentDisplay = document.getElementById('current-display');
@@ -16,6 +15,8 @@ operators.forEach(operator => operator.addEventListener('click', operatorFunctio
 function numberFunction() {
     if (preProcess.some(item => item === '.') && this.dataset.value === '.') { 
         return; //Avoid multiple '.' after one is in the array
+    } else if ((operatorCheck(finalProcess[finalProcess.length - 1]) === false) && (finalProcess[finalProcess.length - 1] !== undefined)) { //Check for undefined, so it works at the start
+        return; //Avoid numbers beside each other after deleting operator 
     }
     preProcess.push(this.dataset.value);
     currentDisplay.textContent = `${finalProcess.join(' ')} ${preProcess.join('')}`;
@@ -31,7 +32,7 @@ function operatorFunction() {
     if (finalProcess.length === 0) { 
         return; //Check array to avoid making operators the first item
     }
-    let isOperator = operatorCheck();
+    let isOperator = operatorCheck(finalProcess[finalProcess.length - 1]);
     if (isOperator === true) { //Removes last array item if it is an operator
         finalProcess = finalProcess.slice(0, -1);
     }
@@ -53,8 +54,8 @@ function deleteLast() {
         return; //Check if the User has typed anything to delete
     } else if (preProcess.length > 0) { //Last item Number
         preProcess = preProcess.slice(0, -1);
-    } else if (operatorCheck() === true) { //Last item Operator
-        finalProcess = finalProcess.slice(0, -1); 
+    } else if (operatorCheck(finalProcess[finalProcess.length - 1]) === true) { 
+        finalProcess = finalProcess.slice(0, -1);  //Last item Operator
     } else { //Last item Number after deleting an Operator
         let tempArray = finalProcess[finalProcess.length - 1].split('');
         tempArray = tempArray.slice(0, -1).join('');
@@ -65,14 +66,15 @@ function deleteLast() {
 }
 
 //Operator Check
-function operatorCheck() {
-    switch (finalProcess[finalProcess.length - 1]) {
+function operatorCheck(item) {
+    switch (item) {
         case '%':
         case 'x':
         case '-':
         case '+':
-            return true
+            return true;
     }
+    return false;
 }
 
 //Basic Math operators
