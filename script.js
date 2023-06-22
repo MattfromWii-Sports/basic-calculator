@@ -9,7 +9,7 @@ const operators = document.querySelectorAll('button.operator');
 const equalBtn = document.getElementById('equal-button');
 
 equalBtn.addEventListener('click', evaluate);
-resetAC.addEventListener('click', resetEverything(0, 0));
+resetAC.addEventListener('click', resetEverything);
 deleteC.addEventListener('click', deleteLast);
 numbers.forEach(number => number.addEventListener('click', numberFunction));
 operators.forEach(operator => operator.addEventListener('click', operatorFunction));
@@ -41,7 +41,6 @@ function operatorFunction() {
     }
     finalProcess.push(this.dataset.value);
     currentDisplay.textContent = `${finalProcess.join(' ')}`;
-    console.log(finalProcess);
 }
 
 //Reset & Delete
@@ -73,7 +72,7 @@ function evaluate() {
     finalProcess.push(preProcess.join(''));
     let numbersOnly = finalProcess.filter(x => operatorCheck(x) === false);
     let operatorsOnly = finalProcess.filter(x => operatorCheck(x) === true);
-    const result = numbersOnly.reduce((total, next) => {
+    let result = numbersOnly.reduce((total, next) => {
         switch (operatorsOnly[0]) {
             case '%':
                 operatorsOnly.shift();
@@ -90,8 +89,10 @@ function evaluate() {
         }
     });
     resetEverything();
-    console.log(result)
-    lastDisplay.textContent = `${result}`;
+    if (result === Infinity || result === -Infinity) {
+        result = 'You can\'t divide 0'
+    }
+    lastDisplay.textContent = `${Math.round(result * 100) / 100}`;
     
 }
 
