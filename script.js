@@ -6,12 +6,15 @@ const resetAC = document.getElementById('reset-button');
 const deleteC = document.getElementById('delete-button');
 const numbers = document.querySelectorAll('button.number');
 const operators = document.querySelectorAll('button.operator');
+const equalBtn = document.getElementById('equal-button');
 
-resetAC.addEventListener('click', resetEverything);
+equalBtn.addEventListener('click', evaluate);
+resetAC.addEventListener('click', resetEverything(0, 0));
 deleteC.addEventListener('click', deleteLast);
 numbers.forEach(number => number.addEventListener('click', numberFunction));
 operators.forEach(operator => operator.addEventListener('click', operatorFunction));
 
+//Numbers & Operators
 function numberFunction() {
     if (preProcess.some(item => item === '.') && this.dataset.value === '.') { 
         return; //Avoid multiple '.' after one is in the array
@@ -63,6 +66,33 @@ function deleteLast() {
         finalProcess.push(tempArray);
     }
     currentDisplay.textContent = `${finalProcess.join(' ')} ${preProcess.join('')}`;
+}
+
+//Evaluation
+function evaluate() {
+    finalProcess.push(preProcess.join(''));
+    let numbersOnly = finalProcess.filter(x => operatorCheck(x) === false);
+    let operatorsOnly = finalProcess.filter(x => operatorCheck(x) === true);
+    const result = numbersOnly.reduce((total, next) => {
+        switch (operatorsOnly[0]) {
+            case '%':
+                operatorsOnly.shift();
+                return divide(+total, +next);
+            case 'x':
+                operatorsOnly.shift();
+                return multiply(+total, +next);
+            case '-':
+                operatorsOnly.shift();
+                return subtract(+total, +next);
+            case '+':
+                operatorsOnly.shift();
+                return add(+total, +next);
+        }
+    });
+    resetEverything();
+    console.log(result)
+    lastDisplay.textContent = `${result}`;
+    
 }
 
 //Operator Check
